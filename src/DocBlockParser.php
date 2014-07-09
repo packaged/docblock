@@ -1,0 +1,144 @@
+<?php
+namespace Packaged\DocBlock;
+
+use Eloquent\Blox\BloxParser;
+use Eloquent\Blox\Element\DocumentationTag;
+
+class DocBlockParser
+{
+  /**
+   * @var \Eloquent\Blox\Element\DocumentationBlock
+   */
+  protected $_docBlock;
+
+  public function __construct($docBlock)
+  {
+    $this->_docBlock = (new BloxParser())->parseBlockComment($docBlock);
+  }
+
+  public static function fromObject($object)
+  {
+    $reflect = new \ReflectionClass($object);
+    return new self($reflect->getDocComment());
+  }
+
+  public static function fromMethod($object, $method)
+  {
+    $reflect = new \ReflectionMethod($object, $method);
+    return new self($reflect->getDocComment());
+  }
+
+  public static function fromProperty($object, $property)
+  {
+    $reflect = new \ReflectionProperty($object, $property);
+    return new self($reflect->getDocComment());
+  }
+
+  /**
+   * Get the summary of the docblock
+   * @return null|string
+   */
+  public function getSummary()
+  {
+    return $this->_docBlock->summary();
+  }
+
+  /**
+   * Get the body of the docblock (excluding summary)
+   *
+   * @return null|string
+   */
+  public function getBody()
+  {
+    return $this->_docBlock->body();
+  }
+
+  /**
+   * Get the Blox docblock
+   *
+   * @return \Eloquent\Blox\Element\DocumentationBlock
+   */
+  public function rawDocBlock()
+  {
+    return $this->_docBlock;
+  }
+
+  /**
+   * Retrieve all the docblock tags
+   * @return array
+   */
+  public function getTags()
+  {
+    $return = [];
+    foreach($this->_docBlock->tags() as $tag)
+    {
+      /**
+       * @var $tag DocumentationTag
+       */
+      if(!isset($return[$tag->name()]))
+      {
+        $return[$tag->name()] = [];
+      }
+
+      $return[$tag->name()][] = $tag->content();
+    }
+    return $return;
+  }
+
+  /**
+   * Check to see if the docblock has one or more tags by name
+   *
+   * @param $tag
+   *
+   * @return bool
+   */
+  public function hasTag($tag)
+  {
+    return $this->_docBlock->tagsByName($tag) !== [];
+  }
+
+  /**
+   * Retrieve the number of instances of a tag
+   *
+   * @param $tag
+   *
+   * @return int|void
+   */
+  public function getTagCount($tag)
+  {
+    return count($this->_docBlock->tagsByName($tag));
+  }
+
+  /**
+   * Get the value of a tag.  If one tag exists, the value will be returned.
+   * If multiple items exist, they will be returned as an array
+   * If no items exist, the default value will be returned
+   *
+   * @param      $tag
+   * @param null $default
+   *
+   * @return array|null|string
+   */
+  public function getTag($tag, $default = null)
+  {
+    $tags = $this->_docBlock->tagsByName($tag);
+
+    /**
+     * @var $tags DocumentationTag[]
+     */
+    switch(count($tags))
+    {
+      case 0:
+        return $default;
+      case 1:
+        return $tags[0]->content();
+      default:
+        $return = [];
+        foreach($tags as $tagData)
+        {
+          $return[] = $tagData->content();
+        }
+        return $return;
+    }
+  }
+}
