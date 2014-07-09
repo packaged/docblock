@@ -123,16 +123,15 @@ class DocBlockParser
   {
     $tags = $this->_docBlock->tagsByName($tag);
 
+    if(empty($tags))
+    {
+      return $default;
+    }
+
     /**
      * @var $tags DocumentationTag[]
      */
-    switch(count($tags))
-    {
-      case 0:
-        return $default;
-      default:
-        return $tags[0]->content();
-    }
+    return $tags[0]->content();
   }
 
   /**
