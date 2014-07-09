@@ -111,13 +111,13 @@ class DocBlockParser
 
   /**
    * Get the value of a tag.  If one tag exists, the value will be returned.
-   * If multiple items exist, they will be returned as an array
+   * If multiple items exist, the first value will be returned
    * If no items exist, the default value will be returned
    *
    * @param      $tag
    * @param null $default
    *
-   * @return array|null|string
+   * @return null|string
    */
   public function getTag($tag, $default = null)
   {
@@ -130,15 +130,29 @@ class DocBlockParser
     {
       case 0:
         return $default;
-      case 1:
-        return $tags[0]->content();
       default:
-        $return = [];
-        foreach($tags as $tagData)
-        {
-          $return[] = $tagData->content();
-        }
-        return $return;
+        return $tags[0]->content();
     }
+  }
+
+  /**
+   * Retrieve the first tag with data, if none exist, return the default
+   *
+   * @param array $tags
+   * @param null  $default
+   *
+   * @return null|string
+   */
+  public function getTagFailover(array $tags, $default = null)
+  {
+    foreach($tags as $tag)
+    {
+      $value = $this->getTag($tag);
+      if($value !== null)
+      {
+        return $value;
+      }
+    }
+    return $default;
   }
 }
