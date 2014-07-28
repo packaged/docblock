@@ -16,22 +16,56 @@ class DocBlockParser
     $this->_docBlock = (new BloxParser())->parseBlockComment($docBlock);
   }
 
+  /**
+   * @param $object
+   *
+   * @return DocBlockParser
+   */
   public static function fromObject($object)
   {
     $reflect = new \ReflectionClass($object);
     return new self($reflect->getDocComment());
   }
 
+  /**
+   * @param $object
+   * @param $method
+   *
+   * @return DocBlockParser
+   */
   public static function fromMethod($object, $method)
   {
     $reflect = new \ReflectionMethod($object, $method);
     return new self($reflect->getDocComment());
   }
 
+  /**
+   * @param $object
+   * @param $property
+   *
+   * @return DocBlockParser
+   */
   public static function fromProperty($object, $property)
   {
     $reflect = new \ReflectionProperty($object, $property);
     return new self($reflect->getDocComment());
+  }
+
+  /**
+   * @param      $object
+   * @param null $filter
+   *
+   * @return DocBlockParser[]
+   */
+  public static function fromProperties($object, $filter = null)
+  {
+    $reflect = new \ReflectionClass($object);
+    $parsers = [];
+    foreach($reflect->getProperties($filter) as $property)
+    {
+      $parsers[$property->name] = new self($property->getDocComment());
+    }
+    return $parsers;
   }
 
   /**
