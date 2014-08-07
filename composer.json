@@ -1,5 +1,6 @@
 {
   "name":              "packaged/docblock",
+  "description":       "Docblock Parser",
   "license":           "MIT",
   "authors":           [
     {
