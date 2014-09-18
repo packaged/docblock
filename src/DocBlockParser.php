@@ -114,7 +114,7 @@ class DocBlockParser
         $return[$tag->name()] = [];
       }
 
-      $return[$tag->name()][] = $tag->content();
+      $return[$tag->name()][] = trim($tag->content());
     }
     return $return;
   }
@@ -165,7 +165,7 @@ class DocBlockParser
     /**
      * @var $tags DocumentationTag[]
      */
-    return $tags[0]->content();
+    return trim($tags[0]->content());
   }
 
   /**
