@@ -17,6 +17,15 @@ class DocBlockParserTest extends PHPUnit_Framework_TestCase
     $this->assertEquals(3, $bloc->getTagCount('value'));
   }
 
+  public function testInlineBlock()
+  {
+    $bloc = \Packaged\DocBlock\DocBlockParser::fromProperty(
+      new DocBlockFiller(),
+      'propertyThree'
+    );
+    $this->assertEquals(1, $bloc->getTagCount('var'));
+  }
+
   public function testFromMethod()
   {
     $bloc = \Packaged\DocBlock\DocBlockParser::fromMethod(
@@ -36,7 +45,7 @@ class DocBlockParserTest extends PHPUnit_Framework_TestCase
       '\Packaged\DocBlock\DocBlockParser',
       $blocs
     );
-    $this->assertCount(2, $blocs);
+    $this->assertCount(3, $blocs);
   }
 
   public function testTagging()
@@ -98,6 +107,9 @@ class DocBlockFiller
   public $property;
 
   public $propertyTwo;
+
+  /** @var integer */
+  public $propertyThree;
 
   /**
    * Method Description
