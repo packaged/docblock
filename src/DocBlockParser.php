@@ -13,7 +13,13 @@ class DocBlockParser
 
   public function __construct($docBlock)
   {
-    $this->_docBlock = (new BloxParser())->parseBlockComment($docBlock);
+    $this->_docBlock = (new BloxParser())->parseBlockComment(
+      preg_replace(
+        ['/^(\h*)(\/\*{2,})\h+(.+?)\h+(\*+\/)$/'],
+        ["$1$2\n * $3\n $4"],
+        $docBlock
+      )
+    );
   }
 
   /**
@@ -70,6 +76,7 @@ class DocBlockParser
 
   /**
    * Get the summary of the docblock
+   *
    * @return null|string
    */
   public function getSummary()
@@ -99,6 +106,7 @@ class DocBlockParser
 
   /**
    * Retrieve all the docblock tags
+   *
    * @return array
    */
   public function getTags()
@@ -136,7 +144,7 @@ class DocBlockParser
    *
    * @param $tag
    *
-   * @return int|void
+   * @return int
    */
   public function getTagCount($tag)
   {
