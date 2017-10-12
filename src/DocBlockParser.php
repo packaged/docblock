@@ -15,7 +15,7 @@ class DocBlockParser
   {
     $this->_docBlock = (new BloxParser())->parseBlockComment(
       preg_replace(
-        ['/^(\h*)(\/\*+)\h+(.+?)\h+(\*+\/)$/'],
+        ['/^(\h*)(\/\*{2,})\h+(.+?)\h+(\*+\/)$/'],
         ["$1$2\n * $3\n $4"],
         $docBlock
       )
