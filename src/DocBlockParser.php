@@ -144,7 +144,7 @@ class DocBlockParser
    *
    * @param $tag
    *
-   * @return int|void
+   * @return int
    */
   public function getTagCount($tag)
   {
