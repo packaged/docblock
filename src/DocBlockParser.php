@@ -1,25 +1,32 @@
 <?php
 namespace Packaged\DocBlock;
 
-use Eloquent\Blox\BloxParser;
-use Eloquent\Blox\Element\DocumentationTag;
+use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlockFactory;
 
 class DocBlockParser
 {
   /**
-   * @var \Eloquent\Blox\Element\DocumentationBlock
+   * @var DocBlock
    */
   protected $_docBlock;
 
   public function __construct($docBlock)
   {
-    $this->_docBlock = (new BloxParser())->parseBlockComment(
-      preg_replace(
-        ['/^(\h*)(\/\*{2,})\h+(.+?)\h+(\*+\/)$/'],
-        ["$1$2\n * $3\n $4"],
-        $docBlock
-      )
-    );
+    if($docBlock)
+    {
+      $this->_docBlock = DocBlockFactory::createInstance()->create(
+        preg_replace(
+          ['/^(\h*)(\/\*{2,})\h+(.+?)\h+(\*+\/)$/'],
+          ["$1$2\n * $3\n $4"],
+          $docBlock
+        )
+      );
+    }
+    else
+    {
+      $this->_docBlock = null;
+    }
   }
 
   /**
@@ -81,7 +88,7 @@ class DocBlockParser
    */
   public function getSummary()
   {
-    return $this->_docBlock->summary();
+    return $this->_docBlock ? $this->_docBlock->getSummary() : '';
   }
 
   /**
@@ -91,13 +98,13 @@ class DocBlockParser
    */
   public function getBody()
   {
-    return $this->_docBlock->body();
+    return $this->_docBlock ? (string)$this->_docBlock->getDescription() : '';
   }
 
   /**
-   * Get the Blox docblock
+   * Get the underlying docblock
    *
-   * @return \Eloquent\Blox\Element\DocumentationBlock
+   * @return DocBlock
    */
   public function rawDocBlock()
   {
@@ -112,17 +119,14 @@ class DocBlockParser
   public function getTags()
   {
     $return = [];
-    foreach($this->_docBlock->tags() as $tag)
+    foreach($this->_docBlock ? $this->_docBlock->getTags() : [] as $tag)
     {
-      /**
-       * @var $tag DocumentationTag
-       */
-      if(!isset($return[$tag->name()]))
+      if(!isset($return[$tag->getName()]))
       {
-        $return[$tag->name()] = [];
+        $return[$tag->getName()] = [];
       }
 
-      $return[$tag->name()][] = trim($tag->content());
+      $return[$tag->getName()][] = trim($tag->getDescription());
     }
     return $return;
   }
@@ -136,7 +140,7 @@ class DocBlockParser
    */
   public function hasTag($tag)
   {
-    return $this->_docBlock->tagsByName($tag) !== [];
+    return $this->_docBlock ? $this->_docBlock->getTagsByName($tag) !== [] : false;
   }
 
   /**
@@ -148,7 +152,7 @@ class DocBlockParser
    */
   public function getTagCount($tag)
   {
-    return count($this->_docBlock->tagsByName($tag));
+    return $this->_docBlock ? count($this->_docBlock->getTagsByName($tag)) : 0;
   }
 
   /**
@@ -163,17 +167,14 @@ class DocBlockParser
    */
   public function getTag($tag, $default = null)
   {
-    $tags = $this->_docBlock->tagsByName($tag);
+    $tags = $this->_docBlock ? $this->_docBlock->getTagsByName($tag) : [];
 
     if(empty($tags))
     {
       return $default;
     }
 
-    /**
-     * @var $tags DocumentationTag[]
-     */
-    return trim($tags[0]->content());
+    return trim($tags[0]->getDescription());
   }
 
   /**

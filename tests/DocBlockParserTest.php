@@ -28,10 +28,7 @@ class DocBlockParserTest extends PHPUnit_Framework_TestCase
 
   public function testCommentBlock()
   {
-    $bloc = \Packaged\DocBlock\DocBlockParser::fromProperty(
-      new DocBlockFiller(),
-      'propertyFour'
-    );
+    $bloc = \Packaged\DocBlock\DocBlockParser::fromProperty(new DocBlockFiller(), 'propertyFour');
     $this->assertEquals('', $bloc->getSummary());
   }
 
@@ -80,8 +77,7 @@ class DocBlockParserTest extends PHPUnit_Framework_TestCase
   {
     $bloc = \Packaged\DocBlock\DocBlockParser::fromObject(new DocBlockFiller());
     $this->assertEquals(
-      'Lorem ipsum dolor sit amet, consectetur'
-      . ' adipiscing elit. Sed ac ligula risus.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac ligula risus.',
       $bloc->getBody()
     );
   }
@@ -90,7 +86,7 @@ class DocBlockParserTest extends PHPUnit_Framework_TestCase
   {
     $bloc = \Packaged\DocBlock\DocBlockParser::fromObject(new DocBlockFiller());
     $this->assertInstanceOf(
-      '\Eloquent\Blox\Element\DocumentationBlock',
+      '\phpDocumentor\Reflection\DocBlock',
       $bloc->rawDocBlock()
     );
   }

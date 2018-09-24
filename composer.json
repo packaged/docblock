@@ -1,21 +1,18 @@
 {
-  "name":              "packaged/docblock",
-  "description":       "Docblock Parser",
-  "license":           "MIT",
-  "authors":           [
-    {
-      "name":  "Brooke Bryan",
-      "email": "brooke@bajb.net"
-    }
-  ],
-  "require":           {
-    "php":           ">=5.4.0",
-    "eloquent/blox": "*"
+  "name": "packaged/docblock",
+  "description": "Docblock Parser",
+  "license": "MIT",
+  "config": {
+    "php": "5.4"
   },
-  "require-dev":       {
+  "require": {
+    "php": ">=5.4.0",
+    "phpdocumentor/reflection-docblock": "4.2.0"
+  },
+  "require-dev": {
     "phpunit/phpunit": "4.1"
   },
-  "autoload":          {
+  "autoload": {
     "psr-4": {
       "Packaged\\DocBlock\\": "src"
     }
