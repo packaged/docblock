@@ -81,15 +81,6 @@ class DocBlockParserTest extends PHPUnit_Framework_TestCase
       $bloc->getBody()
     );
   }
-
-  public function testGetRaw()
-  {
-    $bloc = \Packaged\DocBlock\DocBlockParser::fromObject(new DocBlockFiller());
-    $this->assertInstanceOf(
-      '\phpDocumentor\Reflection\DocBlock',
-      $bloc->rawDocBlock()
-    );
-  }
 }
 
 /**

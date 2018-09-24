@@ -102,16 +102,6 @@ class DocBlockParser
   }
 
   /**
-   * Get the underlying docblock
-   *
-   * @return DocBlock
-   */
-  public function rawDocBlock()
-  {
-    return $this->_docBlock;
-  }
-
-  /**
    * Retrieve all the docblock tags
    *
    * @return array
