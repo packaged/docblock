@@ -3,19 +3,19 @@
   "description": "Docblock Parser",
   "license": "MIT",
   "config": {
-    "php": "5.4"
+    "php": "7.1"
   },
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=7.1",
     "phpdocumentor/reflection-docblock": "^4.3"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.1"
+    "phpunit/phpunit": "^7.5"
   },
   "autoload": {
     "psr-4": {
-      "Packaged\\DocBlock\\": "src"
+      "Packaged\\DocBlock\\": "src",
+      "Packaged\\DocBlock\\Tests\\": "tests"
     }
-  },
-  "minimum-stability": "dev"
+  }
 }

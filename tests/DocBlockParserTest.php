@@ -1,6 +1,10 @@
 <?php
+namespace Packaged\DocBlock\Tests;
 
-class DocBlockParserTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
+
+class DocBlockParserTest extends TestCase
 {
   public function testFromObject()
   {
