@@ -32,6 +32,11 @@ class DocBlockFiller
   public $propertyFour;
 
   /**
+   * @required
+   */
+  public $propertyFive;
+
+  /**
    * Method Description
    *
    * @return mixed
