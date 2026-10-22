@@ -38,6 +38,13 @@ class DocBlockParserTest extends TestCase
     $this->assertEquals('', $bloc->getSummary());
   }
 
+  public function testTagWithoutDescription()
+  {
+    $bloc = \Packaged\DocBlock\DocBlockParser::fromProperty(new DocBlockFiller(), 'propertyFive');
+    $this->assertEquals(['required' => ['']], $bloc->getTags());
+    $this->assertSame('', $bloc->getTag('required'));
+  }
+
   public function testFromMethod()
   {
     $bloc = \Packaged\DocBlock\DocBlockParser::fromMethod(
@@ -57,7 +64,7 @@ class DocBlockParserTest extends TestCase
       '\Packaged\DocBlock\DocBlockParser',
       $blocs
     );
-    $this->assertCount(4, $blocs);
+    $this->assertCount(5, $blocs);
   }
 
   public function testTagging()
